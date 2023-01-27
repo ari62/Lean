@@ -111,6 +111,11 @@ namespace QuantConnect.Algorithm.Framework.Alphas
         /// Gets the portfolio weight of this insight
         /// </summary>
         public double? Weight { get; private set; }
+        
+        /// <summary>
+        /// Gets the tag for this insight
+        /// </summary>
+        public string Tag { get; protected set; }
 
         /// <summary>
         /// Gets the most recent scores for this insight
@@ -165,7 +170,8 @@ namespace QuantConnect.Algorithm.Framework.Alphas
         /// <param name="confidence">The confidence in this insight</param>
         /// <param name="sourceModel">An identifier defining the model that generated this insight</param>
         /// <param name="weight">The portfolio weight of this insight</param>
-        public Insight(Symbol symbol, TimeSpan period, InsightType type, InsightDirection direction, double? magnitude, double? confidence, string sourceModel = null, double? weight = null)
+        /// <param name="tag">The tag for this insight</param>
+        public Insight(Symbol symbol, TimeSpan period, InsightType type, InsightDirection direction, double? magnitude, double? confidence, string sourceModel = null, double? weight = null, string tag = "")
         {
             Id = Guid.NewGuid();
             Score = new InsightScore();
@@ -180,6 +186,7 @@ namespace QuantConnect.Algorithm.Framework.Alphas
             Magnitude = magnitude;
             Confidence = confidence;
             Weight = weight;
+            Tag = tag;
 
             _periodSpecification = new TimeSpanPeriodSpecification(period);
         }
@@ -207,8 +214,9 @@ namespace QuantConnect.Algorithm.Framework.Alphas
         /// <param name="confidence">The confidence in this insight</param>
         /// <param name="sourceModel">An identifier defining the model that generated this insight</param>
         /// <param name="weight">The portfolio weight of this insight</param>
-        public Insight(Symbol symbol, Func<DateTime, DateTime> expiryFunc, InsightType type, InsightDirection direction, double? magnitude, double? confidence, string sourceModel = null, double? weight = null)
-            : this(symbol, new FuncPeriodSpecification(expiryFunc), type, direction, magnitude, confidence, sourceModel, weight)
+        /// <param name="tag">The tag for this insight</param>
+        public Insight(Symbol symbol, Func<DateTime, DateTime> expiryFunc, InsightType type, InsightDirection direction, double? magnitude, double? confidence, string sourceModel = null, double? weight = null, string tag = "")
+            : this(symbol, new FuncPeriodSpecification(expiryFunc), type, direction, magnitude, confidence, sourceModel, weight, tag)
         {
         }
 
@@ -226,8 +234,9 @@ namespace QuantConnect.Algorithm.Framework.Alphas
         /// <param name="confidence">The confidence in this insight</param>
         /// <param name="sourceModel">An identifier defining the model that generated this insight</param>
         /// <param name="weight">The portfolio weight of this insight</param>
-        public Insight(DateTime generatedTimeUtc, Symbol symbol, TimeSpan period, InsightType type, InsightDirection direction, double? magnitude, double? confidence, string sourceModel = null, double? weight = null)
-            : this(symbol, period, type, direction, magnitude, confidence, sourceModel, weight)
+        /// <param name="tag">The tag for this insight</param>
+        public Insight(DateTime generatedTimeUtc, Symbol symbol, TimeSpan period, InsightType type, InsightDirection direction, double? magnitude, double? confidence, string sourceModel = null, double? weight = null, string tag = "")
+            : this(symbol, period, type, direction, magnitude, confidence, sourceModel, weight, tag)
         {
             GeneratedTimeUtc = generatedTimeUtc;
             CloseTimeUtc = generatedTimeUtc + period;
@@ -244,7 +253,8 @@ namespace QuantConnect.Algorithm.Framework.Alphas
         /// <param name="confidence">The confidence in this insight</param>
         /// <param name="sourceModel">An identifier defining the model that generated this insight</param>
         /// <param name="weight">The portfolio weight of this insight</param>
-        private Insight(Symbol symbol, IPeriodSpecification periodSpec, InsightType type, InsightDirection direction, double? magnitude, double? confidence, string sourceModel = null, double? weight = null)
+        /// <param name="tag">The tag for this insight</param>
+        private Insight(Symbol symbol, IPeriodSpecification periodSpec, InsightType type, InsightDirection direction, double? magnitude, double? confidence, string sourceModel = null, double? weight = null, string tag = "")
         {
             Id = Guid.NewGuid();
             Score = new InsightScore();
@@ -258,6 +268,7 @@ namespace QuantConnect.Algorithm.Framework.Alphas
             Magnitude = magnitude;
             Confidence = confidence;
             Weight = weight;
+            Tag = tag;
 
             _periodSpecification = periodSpec;
 
@@ -300,7 +311,8 @@ namespace QuantConnect.Algorithm.Framework.Alphas
                 ReferenceValue = ReferenceValue,
                 ReferenceValueFinal = ReferenceValueFinal,
                 SourceModel = SourceModel,
-                GroupId = GroupId
+                GroupId = GroupId,
+                Tag = Tag
             };
         }
 

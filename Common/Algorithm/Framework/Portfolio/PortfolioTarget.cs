@@ -39,14 +39,22 @@ namespace QuantConnect.Algorithm.Framework.Portfolio
         public decimal Quantity { get; }
 
         /// <summary>
+        /// Gets the target tag
+        /// </summary>
+        public string Tag { get; protected set; }
+
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="PortfolioTarget"/> class
         /// </summary>
         /// <param name="symbol">The symbol this target is for</param>
         /// <param name="quantity">The target quantity</param>
-        public PortfolioTarget(Symbol symbol, decimal quantity)
+        /// <param name="tag">The target tag</param>
+        public PortfolioTarget(Symbol symbol, decimal quantity, string tag = "")
         {
             Symbol = symbol;
             Quantity = quantity;
+            Tag = tag;
         }
 
         /// <summary>
